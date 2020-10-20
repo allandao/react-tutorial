@@ -1,6 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
 
 // Developer Tools -> Click arrow to navigate right -> Use Components or Profiler React Tools
 
@@ -12,12 +12,12 @@ import './index.css';
 //     super(props);
 //     this.state = {
 //       value: null,
-//     };  
+//     };
 //   }
 
 //   render() {
 //     return (
-//       /* Forgetting () =>  would fire alert each time the component re-renders. 
+//       /* Forgetting () =>  would fire alert each time the component re-renders.
 //        * () => is used to pass a function as the onClick property
 //        * React will only call this function after a click.
 //        */
@@ -48,59 +48,58 @@ each other, you need to declare the shared state in their parent component inste
 The parent component can pass the state back down to the children by using props; this keeps 
 the child components in sync with each other and with the parent component. */
 
-// One approach is that Board should just ask each Square for the Square’s state. 
-// The above method is discouraged, can be buggy. The best case is to store 
-// the game’s state in the parent Board component instead of in each Square. 
+// One approach is that Board should just ask each Square for the Square’s state.
+// The above method is discouraged, can be buggy. The best case is to store
+// the game’s state in the parent Board component instead of in each Square.
 class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       squares: Array(9).fill(null),
       xIsNext: true,
-    };  
+    };
   }
 
   // With this in place, The Square components receive data from the Board class.
   // In React terms, the Square components are now controlled components. The Board has full control over them.
-  handleClick(i) {    
+  handleClick(i) {
     const squares = this.state.squares.slice(); // Allow for immutable objects (new objects to track each instance of a board).
-    // Hard to detect when mutable objects are changed. Immutable objects also allow us to revist old objects, such as to get the winner of a past game.   
-    
+    // Hard to detect when mutable objects are changed. Immutable objects also allow us to revist old objects, such as to get the winner of a past game.
+
     // Return early to ignore click if already won or a square is filled
     // Using const squares as local variable
-    if (calculateWinner(squares) || squares[i]) {      
-      return;    
+    if (calculateWinner(squares) || squares[i]) {
+      return;
     }
 
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
+    squares[i] = this.state.xIsNext ? "X" : "O";
     this.setState({
       squares: squares,
       // Calling !xIsNext directly does not work as we need to reference the constructor field
       // just like I do in Java.
       xIsNext: !this.state.xIsNext,
-    }); 
-    
+    });
   }
 
   // Each Square will now receive a value prop that will either be 'X', 'O', or null for empty squares.
   renderSquare(i) {
     return (
-          <Square 
-            value={this.state.squares[i]} 
-            onClick={() => this.handleClick(i)} 
-           />
-        );
+      <Square
+        value={this.state.squares[i]}
+        onClick={() => this.handleClick(i)}
+      />
+    );
   }
-  // We split the returned element into multiple lines for readability, and added parentheses so that JavaScript 
+  // We split the returned element into multiple lines for readability, and added parentheses so that JavaScript
   // doesn’t insert a semicolon after return and break our code. JavaScript auto adds semicolons.
 
   render() {
     const winner = calculateWinner(this.state.squares);
     let status;
-    if (winner) {      
-      status = 'Winner: ' + winner;    
-    } else {      
-      status = 'Next player is: ' + (this.state.xIsNext ? 'X' : 'O');    
+    if (winner) {
+      status = "Winner: " + winner;
+    } else {
+      status = "Next player is: " + (this.state.xIsNext ? "X" : "O");
     }
 
     return (
@@ -166,9 +165,7 @@ function calculateWinner(squares) {
 // React.component will throw an error
 class Instructions extends React.Component {
   render() {
-    return (
-      <p>Refresh when a player has won</p>
-    );
+    return <p>Refresh when a player has won</p>;
   }
 }
 
@@ -177,9 +174,8 @@ class Instructions extends React.Component {
 ReactDOM.render(
   // Treat both classes as one element. For ReactDOM, we can only pass in one element
   <React.Fragment>
-  <Game />
-  <Instructions />
+    <Game />
+    <Instructions />
   </React.Fragment>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
-
